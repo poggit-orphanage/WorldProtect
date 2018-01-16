@@ -28,7 +28,7 @@ class SaveInventory extends BaseWp implements Listener{
 	public function __construct(Plugin $plugin){
 		parent::__construct($plugin);
 		$this->owner->getServer()->getPluginManager()->registerEvents($this, $this->owner);
-		$this->saveOnDeath = $plugin->getConfig()->getNested("features")["death-save-inv"] ?? false;
+		$this->saveOnDeath = $plugin->getConfig()->getNested("features")["gm-save-inv"] ?? false;
 	}
 
     public function loadInv(Player $player, $inv = null, SaveInventory $owner){
