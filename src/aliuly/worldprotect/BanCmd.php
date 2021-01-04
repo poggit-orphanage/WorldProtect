@@ -25,10 +25,10 @@ class BanCmd extends BaseWp implements Listener {
 		parent::__construct($plugin);
 		$this->owner->getServer()->getPluginManager()->registerEvents($this, $this->owner);
 		$this->enableSCmd("bancmd",["usage" => mc::_("[command]"),
-													"help" => mc::_("Bans the given command"),
+													"help" => mc::_("Verbietet Befehle "),
 													"permission" => "wp.cmd.bancmd"]);
 		$this->enableSCmd("unbancmd",["usage" => mc::_("[command]"),
-												 "help" => mc::_("Unbans command"),
+												 "help" => mc::_("Enbanne Befehle"),
 												 "permission" => "wp.cmd.bancmd"]);
 	}
 
@@ -37,9 +37,9 @@ class BanCmd extends BaseWp implements Listener {
 		if (count($args) == 0) {
 			$cmds = $this->owner->getCfg($world, "bancmds", []);
 			if (count($cmds) == 0) {
-				$c->sendMessage(mc::_("[WP] No banned commands in %1%",$world));
+				$c->sendMessage(mc::_("[WP] Keine gesperrten Befehle in  %1%",$world));
 			} else {
-				$c->sendMessage(mc::_("[WP] Commands(%1%): %2%",count($cmds), implode(", ",$cmds)));
+				$c->sendMessage(mc::_("[WP] Befehle(%1%): %2%",count($cmds), implode(", ",$cmds)));
 			}
 			return true;
 		}
@@ -47,7 +47,7 @@ class BanCmd extends BaseWp implements Listener {
 		$cmds = $this->owner->getCfg($world, "bancmds", []);
 		if ($scmd == "unbancmd") {
 			foreach ($args as $i) {
-				if ($i{0} !== "/") $i = "/".$i;
+				if ($i[0] !== "/") $i = "/".$i;
 				$i = strtolower($i);
 				if (isset($cmds[$i])) {
 					unset($cmds[$i]);
@@ -56,7 +56,7 @@ class BanCmd extends BaseWp implements Listener {
 			}
 		} elseif ($scmd == "bancmd") {
 			foreach ($args as $i) {
-				if ($i{0} !== "/") $i = "/".$i;
+				if ($i[0] !== "/") $i = "/".$i;
 				$i = strtolower($i);
 				if (isset($cmds[$i])) continue;
 				$cmds[$i] = $i;
@@ -66,7 +66,7 @@ class BanCmd extends BaseWp implements Listener {
 			return false;
 		}
 		if (!$cc) {
-			$c->sendMessage(mc::_("No commands updated"));
+			$c->sendMessage(mc::_("Keine Befehle aktualisiert "));
 			return true;
 		}
 		if (count($cmds)) {
@@ -74,7 +74,7 @@ class BanCmd extends BaseWp implements Listener {
 		} else {
 			$this->owner->unsetCfg($world,"bancmds");
 		}
-		$c->sendMessage(mc::_("Commands changed: %1%",$cc));
+		$c->sendMessage(mc::_("Befehle geändert : %1%",$cc));
 		return true;
 	}
 	/**
@@ -91,7 +91,7 @@ class BanCmd extends BaseWp implements Listener {
 		$cmdline = preg_split('/\s+/',$cmdline);
 		$cmd = strtolower($cmdline[0]);
 		if (!isset($this->wcfg[$world][$cmd])) return;
-		$pl->sendMessage(mc::_("That command is banned here!"));
+		$pl->sendMessage(mc::_("Dieser Befehl ist hier verboten !"));
 		$ev->setCancelled();
 	}
 }
